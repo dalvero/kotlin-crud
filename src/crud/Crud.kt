@@ -77,14 +77,16 @@ fun getMenu(menu : Array<String>) : Int? {
 // BERBEDA DENGAN ARRAY YANG UKURANNYA TETAP/FIXED SIZE
 
 val listBarang = mutableListOf<String>() // UNTUK MENAMPUNG DATA BARANG
+val listIdBarang = mutableListOf<String>() // UNTUK MENAMPUNG ID BARANG
+var number = listIdBarang.size
 
 // CONDITION
 fun runCrud(option: Int) {
     when (option) {
         0 -> tambahData()
-        1 -> tampilData()
-        2 -> printTitle(title = "Edit Data")
-        3 -> printTitle(title = "Delete Data")
+        1 -> tampilData(true)
+        2 -> editData()
+        3 -> hapusData()
     }
 }
 
@@ -100,6 +102,13 @@ fun tambahData(){
     if (barang != null){
         if (check == null){
             println("> $barang berhasil ditambahkan di Data Barang anda.")
+
+            // ID BARANG
+            number++
+            val getIdBarang = "BRG-$number"
+
+            // PENAMBAHAN KE LIST
+            listIdBarang.add(getIdBarang)
             listBarang.add(barang)
         } else {
             println("> $barang tidak berhasil ditambahkan di Data Barang anda.")
@@ -110,23 +119,116 @@ fun tambahData(){
 }
 
 // TAMPIL DATA
-fun tampilData(){
-    printTitle(title = "List Barang")
-    for (i in 0..< listBarang.size){
-        println("${i + 1}. ${listBarang[i]}")
+fun tampilData(withTitle : Boolean){
+    if (withTitle){
+        printTitle(title = "List Barang")
+    }
+
+    // TABEL KOMPONEN
+    val lebarNo = 5
+    val lebarId = 7
+    val lebarNamaBarang = 35
+
+    // PRINT LINE HEADER
+    val line = "+${"-".repeat(lebarNo + 1)}+${"-".repeat(lebarId + 1)}+${"-".repeat(lebarNamaBarang - 3)}+"
+    println(line)
+    println("| ${"No".padEnd(lebarNo - 1)} | ${"ID".padEnd(lebarId - 1)} | ${"Nama Barang".padEnd(lebarNamaBarang - 4)}|")
+    println(line)
+
+    // PRINT DATA
+    if (listBarang.isEmpty()){
+        println("| ${"Tidak ada barang tersedia.".padEnd(lebarNo + lebarId + lebarNamaBarang)}|")
+    } else {
+        for ((no, barang) in listBarang.withIndex()){
+            val nomor = (no + 1).toString().padEnd(lebarNo - 1)
+            val idBarang = listIdBarang[no].padEnd(lebarId - 1)
+            val namaBarang = barang.padEnd(lebarNamaBarang - 5)
+            println("| $nomor | $idBarang | $namaBarang |")
+        }
+    }
+
+    // PRINT LINE FOOTER
+    println(line)
+}
+
+// EDIT DATA
+fun editData(){
+    printTitle(title = "Edit Data")
+
+    // PRINT DATA
+    println()
+    tampilData(false)
+    println()
+
+    // PILIH DATA
+    print("> Masukan nama barang yang ingin diedit : ")
+    val barangToEdit = readlnOrNull()
+
+    if (listBarang.isEmpty()){
+        println("> Data Barang masih kosong, silahkan tambahkan\n  barang terlebih dahulu")
+        return
+    }
+
+    // CEK APAKAH BARANG YANG DIMASUKAN ADA DI DATA ATAU TIDAK
+    val indexBarangKetemu = listBarang.indexOfFirst { it.equals(barangToEdit, ignoreCase = true) } // MENGEMBALIKAN 1 (TRUE) / -1 (FALSE)
+
+    if (indexBarangKetemu != -1){ // JIKA BARANG DITEMUKAN
+        println("> $barangToEdit ditemukan")
+        println("> Silahkan edit barang : ")
+        print("> Masukan nama barang : ")
+        val updatedBarang = readlnOrNull()
+
+        if (updatedBarang != null){
+            println("> ${listBarang[indexBarangKetemu]} berhasil diperbarui menjadi $updatedBarang")
+            listBarang[indexBarangKetemu] = updatedBarang
+        } else {
+            println("> Nama barang tidak boleh kosong, silahkan ulangi!")
+        }
+    } else { // JIKA BARANG TIDAK DITEMUKAN
+        println("> $barangToEdit tidak ditemukan, silahkan coba lagi")
     }
 }
 
-// MAIN FUNCTION
-fun main() {
-    // ARRAY MENU
-    val menu = arrayOf(
-        "Tambah Data",
-        "Tampil Data",
-        "Edit Data",
-        "Hapus Data",
-    )
+// HAPUS DATA
+fun hapusData(){
+    printTitle(title = "Hapus Data")
 
+    // PRINT DATA
+    println()
+    tampilData(false)
+    println()
+
+    // PILIH DATA
+    print("> Masukan nama barang yang ingin hapus : ")
+    val barangHapus = readlnOrNull()
+
+    if (listBarang.isEmpty()){
+        println("> Data Barang masih kosong, silahkan tambahkan\n  barang terlebih dahulu")
+        return
+    }
+
+    // CEK APAKAH BARANG YANG DIMASUKAN ADA DI DATA ATAU TIDAK
+    val indexBarangKetemu = listBarang.indexOfFirst { it.equals(barangHapus, ignoreCase = true) } // MENGEMBALIKAN 1 (TRUE) / -1 (FALSE)
+
+    if (indexBarangKetemu != -1){ // JIKA BARANG DITEMUKAN
+        println("> $barangHapus ditemukan")
+        listBarang.removeAt(indexBarangKetemu)
+        println("> $barangHapus berhasil di dihapus ")
+
+    } else { // JIKA BARANG TIDAK DITEMUKAN
+        println("> $barangHapus tidak ditemukan, silahkan coba lagi")
+    }
+}
+
+// ARRAY MENU
+val menu = arrayOf(
+    "Tambah Data",
+    "Tampil Data",
+    "Edit Data",
+    "Hapus Data",
+)
+
+fun start(){
     // BOOLEAN VARIABEL UNTUK EXIT
     var isExit = false
 
@@ -146,4 +248,9 @@ fun main() {
         }
 
     } while (!isExit)
+}
+
+// MAIN FUNCTION
+fun main() {
+    start()
 }
