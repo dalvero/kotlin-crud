@@ -18,14 +18,14 @@ fun printTitle(char : Char = '=', title : String, panjang : Int = 50){
     val rightPadding = remainingChars - leftPadding
 
     // PRINT PADDING KIRIR
-    for (i in 0 until leftPadding) {
+    for (i in 0..< leftPadding) {
         print(char)
     }
     // PRINT JUDUL
     print(title)
 
     // PRINT PADDING KANAN
-    for (i in 0 until rightPadding) {
+    for (i in 0..< rightPadding) {
         print(char)
     }
     println()
@@ -33,20 +33,20 @@ fun printTitle(char : Char = '=', title : String, panjang : Int = 50){
 
 fun main() {
     // ARRAY DATA
-    var hewan = arrayOf("Kucing", "Ikan", "kambing")
+    val hewan = arrayOf("Kucing", "Ikan", "kambing")
 
     // FUNCTION BIASA
-    crud.printTitle(title = "FUNCTION BIASA")
+    printTitle(title = "FUNCTION BIASA")
     printArray(hewan)
     println()
 
     // FUNCTION DEFAULT PARAMETER
-    crud.printTitle(title = "FUNCTION DEFAULT PARAMETER")
+    printTitle(title = "FUNCTION DEFAULT PARAMETER")
     printArray()
     println()
 
     // FUNCTION NAMED PARAMETER
-    crud.printTitle(title = "FUNCTION NAMED PARAMEETER")
+    printTitle(title = "FUNCTION NAMED PARAMEETER")
     printArray(
         data = arrayOf("Bebek", "Ayam", "Dinosaurus")
     )
@@ -54,17 +54,17 @@ fun main() {
 
 
     // LUAS PESEGI PANJANG WITH SINGLE EXPRESIION
-    crud.printTitle(title = "LUAS PEERSEGI PANJANG SINGLE EXPRESION")
+    printTitle(title = "LUAS PEERSEGI PANJANG SINGLE EXPRESION")
     println("Luas Perseegi = ${luasPersegi(sisi = 20)}")
     println()
 
     // SINGLE EXPRESSION
-    crud.printTitle(title = "SINGLE EXPRESSION")
+    printTitle(title = "SINGLE EXPRESSION")
     val name = "Andi"
     println(name.hello())
 
     // EXTENSION FUNCTION
-    crud.printTitle(title = "EXTENSION FUNCTION")
+    printTitle(title = "EXTENSION FUNCTION")
     println("Luas Persegi  = ${20.luasPersegiExtension()}")
     println()
 
@@ -75,20 +75,20 @@ fun main() {
     println()
 
     // LAMBDA EXPRESSION IT KEYWORD
-    crud.printTitle(title = "LAMBDA EXPRESSION 'IT' KEYWORD")
+    printTitle(title = "LAMBDA EXPRESSION 'IT' KEYWORD")
     val hitungLuasPersegiIt : (Int) -> Int = {it.luasPersegiExtension()}
     println("[LAMBDA EXP IT KEY] Luas Persegi = ${hitungLuasPersegiIt(5)}")
     println()
 
     // LAMBDA EXPRESSION METHOD REFERENCE
-    crud.printTitle(title = "LAMBDA EXPRESSION METHOD REFERENCES")
+    printTitle(title = "LAMBDA EXPRESSION METHOD REFERENCES")
     val hitungLuasPersegiMethRef : (Int) -> Int = ::luasPersegi
     println("[LAMBDA EXP METHOD REFERENCE] Luas Persegi = ${hitungLuasPersegiMethRef(6)}")
     println()
 }
 
 fun printArray(data : Array<String> = arrayOf("Data 1", "Data 2" , "Data 3", "Data n")){
-    for (i in 0..data.size - 1) println("${i + 1}. ${data.get(i)}")
+    for (i in data.indices) println("${i + 1}. ${data[i]}")
 }
 
 fun luasPersegi(sisi : Int = 4) : Int = sisi * sisi
